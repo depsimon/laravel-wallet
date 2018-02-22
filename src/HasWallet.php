@@ -44,19 +44,32 @@ trait HasWallet
      * @param  string  $type
      * @param  array   $meta
      */
-    public function deposit($amount, $type = 'deposit', $meta = [])
+    public function deposit($amount, $type = 'deposit', $meta = [], $accepted = true)
     {
-        $this->wallet->balance += $amount;
-        $this->wallet->save();
+        if ($accepted) {
+            $this->wallet->balance += $amount;
+            $this->wallet->save();
+        }
 
         $this->wallet->transactions()
             ->create([
                 'amount' => $amount,
                 'hash' => uniqid('lwch_'),
                 'type' => $type,
-                'accepted' => true,
+                'accepted' => $accepted,
                 'meta' => $meta
             ]);
+    }
+
+    /**
+     * Fail to move credits to this account
+     * @param  integer $amount
+     * @param  string  $type
+     * @param  array   $meta
+     */
+    public function failDeposit($amount, $type = 'deposit', $meta = [])
+    {
+        $this->deposit($amount, $type, $meta, false);
     }
 
     /**
