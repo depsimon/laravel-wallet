@@ -47,7 +47,7 @@ trait HasWallet
     public function deposit($amount, $type = 'deposit', $meta = [])
     {
         $this->wallet->balance += $amount;
-        $this->save();
+        $this->wallet->save();
 
         $this->wallet->transactions()
             ->create([
@@ -72,7 +72,7 @@ trait HasWallet
 
         if ($accepted) {
             $this->wallet->balance += $amount;
-            $this->save();
+            $this->wallet->save();
         }
 
         $this->wallet->transactions()
