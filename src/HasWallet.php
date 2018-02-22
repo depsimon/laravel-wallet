@@ -49,7 +49,7 @@ trait HasWallet
         $this->wallet->balance += $amount;
         $this->save();
 
-        $this->transactions()
+        $this->wallet->transactions()
             ->create([
                 'amount' => $amount,
                 'hash' => uniqid('lwch_'),
@@ -75,7 +75,7 @@ trait HasWallet
             $this->save();
         }
 
-        $this->transactions()
+        $this->wallet->transactions()
             ->create([
                 'amount' => $amount,
                 'hash' => uniqid('lwch_'),
@@ -104,11 +104,11 @@ trait HasWallet
      */
     public function actualBalance()
     {
-        $credits = $this->transactions()
+        $credits = $this->wallet->transactions()
             ->whereIn('type', ['deposit', 'refund'])
             ->sum('amount');
 
-        $debits = $this->transactions()
+        $debits = $this->wallet->transactions()
             ->whereIn('type', ['withdraw', 'payout'])
             ->sum('amount');
 
