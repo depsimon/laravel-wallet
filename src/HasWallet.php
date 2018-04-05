@@ -84,7 +84,7 @@ trait HasWallet
         $accepted = $shouldAccept ? $this->canWithdraw($amount) : true;
 
         if ($accepted) {
-            $this->wallet->balance += $amount;
+            $this->wallet->balance -= $amount;
             $this->wallet->save();
         }
 
