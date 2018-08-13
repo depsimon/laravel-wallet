@@ -123,10 +123,12 @@ trait HasWallet
     {
         $credits = $this->wallet->transactions()
             ->whereIn('type', ['deposit', 'refund'])
+            ->where('accepted', 1)
             ->sum('amount');
 
         $debits = $this->wallet->transactions()
             ->whereIn('type', ['withdraw', 'payout'])
+            ->where('accepted', 1)
             ->sum('amount');
 
         return $credits - $debits;
