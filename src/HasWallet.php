@@ -49,6 +49,8 @@ trait HasWallet
         if ($accepted) {
             $this->wallet->balance += $amount;
             $this->wallet->save();
+        } elseif (! $this->wallet->exists) {
+            $this->wallet->save();
         }
 
         $this->wallet->transactions()
@@ -85,6 +87,8 @@ trait HasWallet
 
         if ($accepted) {
             $this->wallet->balance -= $amount;
+            $this->wallet->save();
+        } elseif (! $this->wallet->exists) {
             $this->wallet->save();
         }
 
