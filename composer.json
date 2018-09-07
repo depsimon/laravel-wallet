@@ -9,7 +9,7 @@
         "credits",
         "wallet"
     ],
-    "homepage": "https://github.com/depsimon/laravel-wallet",
+    "homepage": "https://github.com/mannikj/laravel-wallet",
     "license": "MIT",
     "authors": [
         {
@@ -17,11 +17,21 @@
             "email": "simon@webartisan.be",
             "homepage": "https://webartisan.be",
             "role": "Developer"
+        },
+        {
+            "name": "Jannik Malken",
+            "email": "mannikj@web.de",
+            "role": "Developer"
         }
     ],
     "require": {
         "php": "^7.0",
-        "illuminate/database": "~5.6"
+        "laravel/framework": "~5.6"
+    },
+    "require-dev": {
+        "mockery/mockery": "^1.1",
+        "orchestra/testbench": "~3.0",
+        "phpunit/phpunit": "^7.3"
     },
     "autoload": {
         "psr-4": {
@@ -45,5 +55,8 @@
                 "Wallet": "Depsimon\\Wallet\\WalletFacade"
             }
         }
+    },
+    "scripts": {
+        "test": "vendor/bin/phpunit"
     }
 }
