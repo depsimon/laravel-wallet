@@ -68,8 +68,14 @@ $user = User::find(1);
 $user->deposit(100, 'deposit', ['stripe_source' => 'ch_BEV2Iih1yzbf4G3HNsfOQ07h', 'description' => 'Deposit of 100 credits from Stripe Payment']);
 $user->withdraw(10, 'withdraw', ['description' => 'Purchase of Item #1234']);
 ```
+## Testing
+This package makes use of https://github.com/orchestral/testbench to create a
+laravel testing environment.
+The tests will execute with a pre-configured in-memory sqlite database, so you don't need setup a database on your own.
 
-### Security
+To run the tests just make sure to install the dependencies via `composer install` first and then execute either `vendor/bin/phpunit` or `composer test` from within the project root directory.
+
+## Security
 
 If you discover any security related issues, please email simon@webartisan.be instead of using the issue tracker.
 
