@@ -18,9 +18,9 @@ class Wallet extends Model
     /**
      * Retrieve owner
      */
-    public function user()
+    public function owner()
     {
-        return $this->belongsTo(config('wallet.user_model', \App\User::class));
+        return $this->morphTo();
     }
 
 }

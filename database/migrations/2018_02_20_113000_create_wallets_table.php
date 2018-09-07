@@ -13,20 +13,15 @@ class CreateWalletsTable extends Migration
      */
     public function up()
     {
-        $userClass = app(config('wallet.user_model', 'App\User'));
 
-        Schema::create('wallets', function (Blueprint $table) use ($userClass) {
+        Schema::create('wallets', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger($userClass->getForeignKey())->nullable();
+            $table->unsignedInteger('owner_id')->nullable();
+            $table->string('owner_type')->nullable();
 
-            $table->bigInteger('balance')->default(0);
+            $table->decimal('balance', 12, 4)->default(0);
 
             $table->timestamps();
-
-            $table->foreign($userClass->getForeignKey())
-                ->references($userClass->getKeyName())
-                ->on($userClass->getTable())
-                ->onDelete('set null');
         });
     }
 

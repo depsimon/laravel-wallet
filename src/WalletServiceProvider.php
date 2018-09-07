@@ -17,7 +17,7 @@ class WalletServiceProvider extends ServiceProvider
             ], 'config');
 
             $this->publishes([
-                __DIR__ . '/../resources/migrations/' => database_path('migrations'),
+                __DIR__ . '/../database/migrations/' => database_path('migrations'),
             ], 'migrations');
         }
     }

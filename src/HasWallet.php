@@ -17,7 +17,7 @@ trait HasWallet
      */
     public function wallet()
     {
-        return $this->hasOne(config('wallet.wallet_model', Wallet::class))->withDefault();
+        return $this->morphOne(Wallet::class, 'owner')->withDefault();
     }
 
     /**
@@ -49,7 +49,7 @@ trait HasWallet
         if ($accepted) {
             $this->wallet->balance += $amount;
             $this->wallet->save();
-        } elseif (! $this->wallet->exists) {
+        } elseif (!$this->wallet->exists) {
             $this->wallet->save();
         }
 
@@ -88,7 +88,7 @@ trait HasWallet
         if ($accepted) {
             $this->wallet->balance -= $amount;
             $this->wallet->save();
-        } elseif (! $this->wallet->exists) {
+        } elseif (!$this->wallet->exists) {
             $this->wallet->save();
         }
 
@@ -107,7 +107,6 @@ trait HasWallet
      * @param  integer $amount
      * @param  string  $type
      * @param  array   $meta
-     * @param  boolean $shouldAccept
      */
     public function forceWithdraw($amount, $type = 'withdraw', $meta = [])
     {
