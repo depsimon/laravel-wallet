@@ -3,18 +3,21 @@
 namespace Depsimon\Wallet;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Transaction extends Model
 {
+    use SoftDeletes;
+
     protected $table = 'wallet_transactions';
 
     protected $fillable = [
-        'wallet_id', 'amount', 'hash', 'type', 'accepted', 'meta'
+        'wallet_id', 'amount', 'hash', 'type', 'meta', 'deleted_at'
     ];
 
     protected $casts = [
         'amount' => 'float',
-        'meta' => 'json'
+        'meta' => 'json',
     ];
 
     /**
