@@ -26,6 +26,9 @@ class HasWalletTest extends TestCase
         $this->assertEquals(1, $user->wallet->transactions->count());
         $this->assertEquals($user->balance, 10);
         $this->assertEquals($user->actualBalance(), 10);
+        $user->deposit(100.75);
+        $this->assertEquals($user->balance, 110.75);
+        $this->assertEquals($user->actualBalance(), 110.75);
     }
 
     /** @test */
@@ -38,6 +41,7 @@ class HasWalletTest extends TestCase
         $this->assertTrue($user->wallet->exists);
         $user->forceWithdraw(10);
         $this->assertEquals($user->balance, -10);
+        $this->assertEquals($user->actualBalance(), -10);
         $this->assertEquals(1, $user->wallet->transactions->count());
         $this->assertEquals(2, $user->wallet->transactions()->withTrashed()->count());
     }
