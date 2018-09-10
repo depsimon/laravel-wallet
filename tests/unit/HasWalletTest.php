@@ -3,8 +3,10 @@
 namespace Depsimon\Wallet\Tests\Unit;
 
 use Depsimon\Wallet\Wallet;
+use Depsimon\Wallet\UnacceptedTransactionException;
 use Depsimon\Wallet\Tests\TestCase;
 use Depsimon\Wallet\Tests\Models\User;
+
 class HasWalletTest extends TestCase
 {
 
@@ -29,6 +31,21 @@ class HasWalletTest extends TestCase
         $user->deposit(100.75);
         $this->assertEquals($user->balance, 110.75);
         $this->assertEquals($user->actualBalance(), 110.75);
+        $this->expectException(UnacceptedTransactionException::class);
+        $transaction = $user->deposit(-30);
+        $this->assertTrue($transaction->trashed());
+    }
+
+    /** @test */
+    public function fail_deposit()
+    {
+        $user = factory(User::class)->create();
+        $this->assertFalse($user->wallet->exists);
+        $transaction = $user->failDeposit(10000);
+        $this->assertTrue($transaction->trashed());
+        $this->assertTrue($user->wallet->exists);
+        $this->assertEquals(1, $user->wallet->transactions()->withTrashed()->count());
+        $this->assertEquals(0, $user->wallet->transactions->count());
     }
 
     /** @test */
@@ -36,7 +53,7 @@ class HasWalletTest extends TestCase
     {
         $user = factory(User::class)->create();
         $this->assertFalse($user->wallet->exists);
-        $this->expectException(\Exception::class);
+        $this->expectException(UnacceptedTransactionException::class);
         $user->withdraw(10);
         $this->assertTrue($user->wallet->exists);
         $user->forceWithdraw(10);

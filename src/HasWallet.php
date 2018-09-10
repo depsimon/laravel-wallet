@@ -46,9 +46,12 @@ trait HasWallet
      * @param  integer $amount
      * @param  string  $type
      * @param  array   $meta
+     * @return Depsimon\Wallet\Transaction
      */
-    public function deposit($amount, $type = 'deposit', $meta = [], $accepted = true)
+    public function deposit($amount, $type = 'deposit', $meta = [], $forceFail = false)
     {
+        $accepted = $amount >= 0 && !$forceFail ? true : false;
+
         if ($accepted) {
             $this->wallet->balance += $amount;
             $this->wallet->save();
@@ -56,7 +59,7 @@ trait HasWallet
             $this->wallet->save();
         }
 
-        $this->wallet->transactions()
+        $transaction = $this->wallet->transactions()
             ->create([
                 'amount' => $amount,
                 'hash' => uniqid('lwch_'),
@@ -64,6 +67,11 @@ trait HasWallet
                 'meta' => $meta,
                 'deleted_at' => $accepted ? null : Carbon::now(),
             ]);
+
+        if (!$accepted && !$forceFail) {
+            throw new UnacceptedTransactionException($transaction, 'Deposit not accepted!');
+        }
+        return $transaction;
     }
 
     /**
@@ -71,10 +79,11 @@ trait HasWallet
      * @param  integer $amount
      * @param  string  $type
      * @param  array   $meta
+     * @return Depsimon\Wallet\Transaction
      */
     public function failDeposit($amount, $type = 'deposit', $meta = [])
     {
-        $this->deposit($amount, $type, $meta, false);
+        return $this->deposit($amount, $type, $meta, true);
     }
 
     /**
@@ -83,6 +92,7 @@ trait HasWallet
      * @param  string  $type
      * @param  array   $meta
      * @param  boolean $shouldAccept
+     * @return Depsimon\Wallet\Transaction
      */
     public function withdraw($amount, $type = 'withdraw', $meta = [], $shouldAccept = true)
     {
@@ -95,7 +105,7 @@ trait HasWallet
             $this->wallet->save();
         }
 
-        $this->wallet->transactions()
+        $transaction = $this->wallet->transactions()
             ->create([
                 'amount' => $amount,
                 'hash' => uniqid('lwch_'),
@@ -105,8 +115,9 @@ trait HasWallet
             ]);
 
         if (!$accepted) {
-            throw new Exception('Withdrawal not accepted!');
+            throw new UnacceptedTransactionException($transaction, 'Withdrawal not accepted!');
         }
+        return $transaction;
     }
 
     /**
