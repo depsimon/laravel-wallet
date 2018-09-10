@@ -57,6 +57,6 @@
         }
     },
     "scripts": {
-        "test": "vendor/bin/phpunit"
+        "test": "vendor/bin/phpunit tests --colors=always --verbose --testdox"
     }
 }

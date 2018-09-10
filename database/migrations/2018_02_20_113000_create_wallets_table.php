@@ -22,6 +22,7 @@ class CreateWalletsTable extends Migration
             $table->decimal('balance', 12, 4)->default(0);
 
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
