@@ -19,5 +19,7 @@
             value="testing"/>
         <env name="DB_CONNECTION"
             value="testing"/>
+        <env name="WALLET_COLUMN_TYPE"
+            value="decimal"/>
     </php>
 </phpunit>

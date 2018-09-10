@@ -4,6 +4,7 @@ return [
 /**
  * Change this if you extend the default Wallet Model
  */
+    'column_type' => env('WALLET_COLUMN_TYPE', 'decimal'),
     'wallet_model' => env('WALLET_MODEL', 'Depsimon\Wallet\Wallet'),
 
     /**
