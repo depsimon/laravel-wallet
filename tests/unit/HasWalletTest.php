@@ -5,7 +5,6 @@ namespace Depsimon\Wallet\Tests\Unit;
 use Depsimon\Wallet\Wallet;
 use Depsimon\Wallet\Tests\TestCase;
 use Depsimon\Wallet\Tests\Models\User;
-
 class HasWalletTest extends TestCase
 {
 
@@ -34,6 +33,7 @@ class HasWalletTest extends TestCase
     {
         $user = factory(User::class)->create();
         $this->assertFalse($user->wallet->exists);
+        $this->expectException(\Exception::class);
         $user->withdraw(10);
         $this->assertTrue($user->wallet->exists);
         $user->forceWithdraw(10);

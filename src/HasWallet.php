@@ -103,6 +103,10 @@ trait HasWallet
                 'meta' => $meta,
                 'deleted_at' => $accepted ? null : Carbon::now(),
             ]);
+
+        if (!$accepted) {
+            throw new Exception('Withdrawal not accepted!');
+        }
     }
 
     /**

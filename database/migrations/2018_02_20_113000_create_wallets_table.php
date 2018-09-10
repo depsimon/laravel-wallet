@@ -13,7 +13,6 @@ class CreateWalletsTable extends Migration
      */
     public function up()
     {
-
         Schema::create('wallets', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('owner_id')->nullable();
