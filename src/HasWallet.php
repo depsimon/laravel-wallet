@@ -28,7 +28,12 @@ trait HasWallet
      */
     public function transactions()
     {
-        return $this->hasManyThrough(config('wallet.transaction_model', Transaction::class), config('wallet.wallet_model', Wallet::class))->latest();
+        return $this->hasManyThrough(
+            config('wallet.transaction_model', Transaction::class),
+            config('wallet.wallet_model', Wallet::class),
+            'owner_id',
+            'wallet_id'
+        )->latest();
     }
 
     /**
