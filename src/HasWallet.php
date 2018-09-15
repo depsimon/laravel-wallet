@@ -62,7 +62,6 @@ trait HasWallet
         $transaction = $this->wallet->transactions()
             ->create([
                 'amount' => $amount,
-                'hash' => uniqid('lwch_'),
                 'type' => $type,
                 'meta' => $meta,
                 'deleted_at' => $accepted ? null : Carbon::now(),
