@@ -6,7 +6,7 @@ return [
      * You can then publish the migrations and
      * change them for more flexibility
      */
-    'load_migrations' => env('WALLET_LOAD_MIGRATIONS', false),
+    'load_migrations' => env('WALLET_LOAD_MIGRATIONS', true),
     /**
      * Change this to specify the money amount column types
      * If not explicitly set to 'decimal' integer columns are used

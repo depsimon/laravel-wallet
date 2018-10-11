@@ -12,7 +12,7 @@ class TestCase extends BaseTestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->withFactories(__DIR__ . '/factories');
+        $this->withFactories(__DIR__ . '/Factories');
         $this->loadLaravelMigrations();
         $this->loadMigrationsFrom('database/migrations');
     }
