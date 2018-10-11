@@ -6,6 +6,8 @@ use Depsimon\Wallet\Wallet;
 use Depsimon\Wallet\UnacceptedTransactionException;
 use Depsimon\Wallet\Tests\TestCase;
 use Depsimon\Wallet\Tests\Models\User;
+use Depsimon\Wallet\Transaction;
+use Illuminate\Support\Collection;
 
 class HasWalletTest extends TestCase
 {
@@ -15,6 +17,26 @@ class HasWalletTest extends TestCase
     {
         $user = factory(User::class)->create();
         $this->assertInstanceOf(Wallet::class, $user->wallet);
+    }
+
+    /** @test */
+    public function transactions()
+    {
+        $user1 = factory(User::class)->create();
+        $wallet1 = factory(Wallet::class)->create(['owner_id' => $user1->id]);
+        $transactions1 = factory(Transaction::class, 10)->create(['wallet_id' => $wallet1->id]);
+        $this->assertInstanceOf(Collection::class, $user1->transactions);
+        $this->assertEquals(10, $user1->transactions()->count());
+        $this->assertEmpty($wallet1->transactions->diff($user1->transactions));
+        $user2 = factory(User::class)->create();
+        $wallet2 = factory(Wallet::class)->create(['owner_id' => $user2->id]);
+        $transactions2 = factory(Transaction::class, 5)->create(['wallet_id' => $wallet2->id]);
+        $this->assertInstanceOf(Collection::class, $user1->transactions);
+        $this->assertEquals(10, $user1->transactions()->count());
+        $this->assertEmpty($wallet2->transactions->diff($user2->transactions));
+        $this->assertInstanceOf(Collection::class, $user2->transactions);
+        $this->assertEquals(5, $user2->transactions()->count());
+        $this->assertEmpty($wallet2->transactions->diff($user2->transactions));
     }
 
     /** @test */

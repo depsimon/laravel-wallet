@@ -12,13 +12,21 @@ class Transaction extends Model
     protected $table = 'wallet_transactions';
 
     protected $fillable = [
-        'wallet_id', 'amount', 'hash', 'type', 'meta', 'deleted_at'
+        'wallet_id', 'amount', 'type', 'meta', 'deleted_at'
     ];
 
     protected $casts = [
         'amount' => 'float',
         'meta' => 'json',
     ];
+
+    public static function boot()
+    {
+        parent::boot();
+        static::creating(function ($transaction) {
+            $transaction->hash = uniqid('lwch_');
+        });
+    }
 
     /**
      * Retrieve the wallet from this transaction
@@ -37,5 +45,6 @@ class Transaction extends Model
             ? '+' . $this->amount
             : '-' . $this->amount;
     }
+
 
 }
