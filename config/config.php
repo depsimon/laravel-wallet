@@ -2,6 +2,12 @@
 
 return [
     /**
+     * Disable auto-loading of the vendor migrations
+     * You can then publish the migrations and
+     * change them for more flexibility
+     */
+    'load_migrations' => env('WALLET_LOAD_MIGRATIONS', false),
+    /**
      * Change this to specify the money amount column types
      * If not explicitly set to 'decimal' integer columns are used
      */

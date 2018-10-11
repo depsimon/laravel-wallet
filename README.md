@@ -13,11 +13,18 @@ composer require depsimon/laravel-wallet
 
 ## Run Migrations
 
-Publish the migrations with this artisan command:
+Per default the package will automatically load the migrations from
+the vendor folder.
+
+If you want more flexibility, you can publish the migration files to your own
+migration directory with the following artisan command:
 
 ```bash
 php artisan vendor:publish --provider="Depsimon\Wallet\WalletServiceProvider" --tag=migrations
 ```
+Make sure to deactivate automatic migration loadingby setting
+the config variable `load_migrations` to false when you have
+published the migration file.
 
 ## Configuration
 
