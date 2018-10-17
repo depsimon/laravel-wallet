@@ -61,7 +61,7 @@ class CreateWalletTables extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('wallets');
         Schema::dropIfExists('wallet_transactions');
+        Schema::dropIfExists('wallets');
     }
 }
