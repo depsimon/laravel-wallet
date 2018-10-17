@@ -16,15 +16,26 @@ class Transaction extends Model
     ];
 
     protected $casts = [
-        'amount' => 'float',
         'meta' => 'json',
     ];
+
+    public function __construct(array $attributes = [])
+    {
+        $type = config('wallet.column_type');
+        if ($type == 'decimal') {
+            $this->casts['amount'] = 'float';
+        } else if ($type == 'integer') {
+            $this->casts['amount'] = 'integer';
+        }
+        parent::__construct($attributes);
+    }
 
     public static function boot()
     {
         parent::boot();
+
         static::creating(function ($transaction) {
-            $transaction->hash = uniqid('lwch_');
+            $transaction->hash = uniqid();
         });
     }
 

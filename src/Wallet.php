@@ -9,6 +9,21 @@ class Wallet extends Model
 {
     use SoftDeletes;
 
+    protected $attributes = [
+        'balance' => 0,
+    ];
+
+    public function __construct(array $attributes = [])
+    {
+        $type = config('wallet.column_type');
+        if ($type == 'decimal') {
+            $this->casts['balance'] = 'float';
+        } else if ($type == 'integer') {
+            $this->casts['balance'] = 'integer';
+        }
+        parent::__construct($attributes);
+    }
+
     /**
      * Retrieve all transactions
      */

@@ -11,12 +11,14 @@ use Illuminate\Support\Collection;
 
 class HasWalletTest extends TestCase
 {
-
     /** @test */
     public function wallet()
     {
         $user = factory(User::class)->create();
         $this->assertInstanceOf(Wallet::class, $user->wallet);
+        $this->assertFalse($user->wallet->exists());
+        $user = factory(User::class)->create();
+        $this->assertTrue(0.0 === $user->wallet->balance);
     }
 
     /** @test */
@@ -39,13 +41,16 @@ class HasWalletTest extends TestCase
         $this->assertEmpty($wallet2->transactions->diff($user2->transactions));
     }
 
+
     /** @test */
     public function deposit()
     {
         $user = factory(User::class)->create();
         $this->assertFalse($user->wallet->exists);
-        $user->deposit(10);
+        $transaction = $user->deposit(10);
         $this->assertTrue($user->wallet->exists);
+        $this->assertTrue($transaction->amount === 10.0);
+        $this->assertNotNull($transaction->hash);
         $this->assertEquals(1, $user->wallet->transactions()->withTrashed()->count());
         $this->assertEquals(1, $user->wallet->transactions->count());
         $this->assertEquals($user->balance, 10);

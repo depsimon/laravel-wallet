@@ -18,10 +18,10 @@ class CreateWalletTables extends Migration
                 $table->increments('id');
                 $table->unsignedInteger('owner_id')->nullable();
                 $table->string('owner_type')->nullable();
-
-                if (config('wallet.column_type') == 'decimal') {
+                $type = config('wallet.column_type');
+                if ($type == 'decimal') {
                     $table->decimal('balance', 12, 4)->default(0); // amount is an decimal, it could be "dollars" or "cents"
-                } else {
+                } else if ($type == 'integer') {
                     $table->integer('balance');
                 }
 

@@ -112,14 +112,13 @@ trait HasWallet
         $transaction = $this->wallet->transactions()
             ->create([
                 'amount' => $amount,
-                'hash' => uniqid('lwch_'),
                 'type' => $type,
                 'meta' => $meta,
                 'deleted_at' => $accepted ? null : Carbon::now(),
             ]);
 
         if (!$accepted) {
-            throw new UnacceptedTransactionException($transaction, 'Withdrawal not accepted!');
+            throw new UnacceptedTransactionException($transaction, 'Withdrawal not accepted due to insufficient funds!');
         }
         return $transaction;
     }
