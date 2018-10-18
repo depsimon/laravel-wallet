@@ -24,7 +24,6 @@ class WalletServiceProvider extends ServiceProvider
         if (config('wallet.load_migrations', true)) {
             $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
         }
-        $this->app->make(Factory::class)->load(__DIR__ . '/../database/factories');
     }
 
     /**
