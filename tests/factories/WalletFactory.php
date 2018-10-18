@@ -10,5 +10,6 @@ $factory->define(Wallet::class, function (Faker $faker, $attributes) {
         : factory(User::class)->create();
     return [
         'owner_id' => $owner->id,
+        'owner_type' => get_class($owner),
     ];
 });
