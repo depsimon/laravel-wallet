@@ -92,7 +92,7 @@ trait HasWallet
 
     /**
      * Attempt to move credits from this account
-     * @param  integer $amount
+     * @param  integer $amount Only the absolute value will be considered
      * @param  string  $type
      * @param  array   $meta
      * @param  boolean $shouldAccept
@@ -100,6 +100,7 @@ trait HasWallet
      */
     public function withdraw($amount, $type = 'withdraw', $meta = [], $shouldAccept = true)
     {
+        $amount = abs($amount);
         $accepted = $shouldAccept ? $this->canWithdraw($amount) : true;
 
         if ($accepted) {
