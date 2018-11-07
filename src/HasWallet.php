@@ -26,7 +26,7 @@ trait HasWallet
     /**
      * Retrieve all transactions of this user
      */
-    public function transactions()
+    public function walletTransactions()
     {
         return $this->hasManyThrough(
             config('wallet.transaction_model', Transaction::class),
@@ -53,7 +53,7 @@ trait HasWallet
      * @param  array   $meta
      * @return Depsimon\Wallet\Transaction
      */
-    public function deposit($amount, $type = 'deposit', $meta = [], $forceFail = false)
+    public function deposit($amount, $meta = [], $type = 'deposit', $forceFail = false)
     {
         $accepted = $amount >= 0 && !$forceFail ? true : false;
 
@@ -85,9 +85,9 @@ trait HasWallet
      * @param  array   $meta
      * @return Depsimon\Wallet\Transaction
      */
-    public function failDeposit($amount, $type = 'deposit', $meta = [])
+    public function failDeposit($amount, $meta = [], $type = 'deposit')
     {
-        return $this->deposit($amount, $type, $meta, true);
+        return $this->deposit($amount, $meta, $type, true);
     }
 
     /**
@@ -98,7 +98,7 @@ trait HasWallet
      * @param  boolean $shouldAccept
      * @return Depsimon\Wallet\Transaction
      */
-    public function withdraw($amount, $type = 'withdraw', $meta = [], $shouldAccept = true)
+    public function withdraw($amount, $meta = [], $type = 'withdraw', $shouldAccept = true)
     {
         $amount = abs($amount);
         $accepted = $shouldAccept ? $this->canWithdraw($amount) : true;
@@ -130,7 +130,7 @@ trait HasWallet
      * @param  string  $type
      * @param  array   $meta
      */
-    public function forceWithdraw($amount, $type = 'withdraw', $meta = [])
+    public function forceWithdraw($amount, $meta = [], $type = 'withdraw')
     {
         return $this->withdraw($amount, $type, $meta, false);
     }

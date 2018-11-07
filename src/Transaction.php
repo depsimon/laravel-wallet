@@ -11,12 +11,16 @@ class Transaction extends Model
 
     protected $table = 'wallet_transactions';
 
+    protected $attributes = [
+        'meta' => '{}',
+    ];
+
     protected $fillable = [
         'wallet_id', 'amount', 'type', 'meta', 'deleted_at'
     ];
 
     protected $casts = [
-        'meta' => 'json',
+        'meta' => 'array',
     ];
 
     public function __construct(array $attributes = [])

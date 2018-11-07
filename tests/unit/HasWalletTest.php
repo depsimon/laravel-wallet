@@ -22,23 +22,23 @@ class HasWalletTest extends TestCase
     }
 
     /** @test */
-    public function transactions()
+    public function wallet_transactions()
     {
         $user1 = factory(User::class)->create();
         $wallet1 = factory(Wallet::class)->create(['owner_id' => $user1->id]);
         $transactions1 = factory(Transaction::class, 10)->create(['wallet_id' => $wallet1->id]);
-        $this->assertInstanceOf(Collection::class, $user1->transactions);
-        $this->assertEquals(10, $user1->transactions()->count());
-        $this->assertEmpty($wallet1->transactions->diff($user1->transactions));
+        $this->assertInstanceOf(Collection::class, $user1->walletTransactions);
+        $this->assertEquals(10, $user1->walletTransactions()->count());
+        $this->assertEmpty($wallet1->transactions->diff($user1->walletTransactions));
         $user2 = factory(User::class)->create();
         $wallet2 = factory(Wallet::class)->create(['owner_id' => $user2->id]);
         $transactions2 = factory(Transaction::class, 5)->create(['wallet_id' => $wallet2->id]);
-        $this->assertInstanceOf(Collection::class, $user1->transactions);
-        $this->assertEquals(10, $user1->transactions()->count());
-        $this->assertEmpty($wallet2->transactions->diff($user2->transactions));
-        $this->assertInstanceOf(Collection::class, $user2->transactions);
-        $this->assertEquals(5, $user2->transactions()->count());
-        $this->assertEmpty($wallet2->transactions->diff($user2->transactions));
+        $this->assertInstanceOf(Collection::class, $user1->walletTransactions);
+        $this->assertEquals(10, $user1->walletTransactions()->count());
+        $this->assertEmpty($wallet2->transactions->diff($user2->walletTransactions));
+        $this->assertInstanceOf(Collection::class, $user2->walletTransactions);
+        $this->assertEquals(5, $user2->walletTransactions()->count());
+        $this->assertEmpty($wallet2->transactions->diff($user2->walletTransactions));
     }
 
 
@@ -87,6 +87,6 @@ class HasWalletTest extends TestCase
         $this->assertEquals($user->balance, -10);
         $this->assertEquals($user->actualBalance(), -10);
         $this->assertEquals(1, $user->wallet->transactions->count());
-        $this->assertEquals(2, $user->wallet->transactions()->withTrashed()->count());
+        $this->assertEquals(2, $user->wallet->walletTransactions()->withTrashed()->count());
     }
 }
