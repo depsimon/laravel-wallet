@@ -20,7 +20,7 @@ trait HasWallet
      */
     public function wallet()
     {
-        return $this->morphOne(Wallet::class, 'owner')->withDefault();
+        return $this->morphOne(config('wallet.wallet_model', Wallet::class), 'owner')->withDefault();
     }
 
     /**

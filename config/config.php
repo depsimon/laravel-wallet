@@ -1,4 +1,6 @@
 <?php
+use Depsimon\Wallet\Wallet;
+use Depsimon\Wallet\Transaction;
 
 return [
     /**
@@ -16,10 +18,10 @@ return [
     /**
      * Change this if you need to extend the default Wallet Model
      */
-    'wallet_model' => env('WALLET_MODEL', 'Depsimon\Wallet\Wallet'),
+    'wallet_model' => env('WALLET_MODEL', Wallet::class),
 
     /**
      * Change this if you need to extend the default Transaction Model
      */
-    'transaction_model' => env('WALLET_TRANSACTION_MODEL', 'Depsimon\Wallet\Transaction'),
+    'transaction_model' => env('WALLET_TRANSACTION_MODEL', Transaction::class),
 ];
