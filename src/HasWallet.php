@@ -132,7 +132,7 @@ trait HasWallet
      */
     public function forceWithdraw($amount, $meta = [], $type = 'withdraw')
     {
-        return $this->withdraw($amount, $type, $meta, false);
+        return $this->withdraw($amount, $meta, $type, false);
     }
 
     /**
