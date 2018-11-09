@@ -88,6 +88,23 @@ class HasWalletTest extends TestCase
         $this->assertEquals(-10000, $user->fresh()->balance);
     }
 
+    /** @test */
+    public function can_withdraw()
+    {
+        $user = factory(User::class)->create();
+        $this->assertFalse($user->wallet->exists);
+        $this->assertFalse($user->canWithdraw());
+        $this->assertFalse($user->canWithdraw(1));
+        $this->assertFalse($user->canWithdraw(-1));
+        $user->wallet->balance = 5;
+        $user->wallet->save();
+        $this->assertTrue($user->canWithdraw());
+        $this->assertTrue($user->canWithdraw(3));
+        $this->assertTrue($user->canWithdraw(-5));
+        $this->assertFalse($user->canWithdraw(6));
+        $this->assertFalse($user->canWithdraw(-6));
+
+    }
 
     /** @test */
     public function withdraw()
