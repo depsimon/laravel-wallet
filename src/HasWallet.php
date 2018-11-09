@@ -43,8 +43,7 @@ trait HasWallet
      */
     public function canWithdraw($amount = null)
     {
-        $amount = abs($amount);
-        return $amount ? $this->balance >= $amount : $this->balance >= 0;
+        return $amount ? $this->balance >= abs($amount) : $this->balance >= 0;
     }
 
     /**
