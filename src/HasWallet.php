@@ -41,9 +41,9 @@ trait HasWallet
      * @param  integer $amount
      * @return boolean
      */
-    public function canWithdraw($amount)
+    public function canWithdraw($amount = null)
     {
-        return $this->balance >= $amount;
+        return $amount ? $this->balance >= $amount : $this->balance >= 0;
     }
 
     /**
