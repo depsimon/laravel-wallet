@@ -11,6 +11,13 @@ use Illuminate\Support\Collection;
 
 class WalletTest extends TestCase
 {
+
+    /** @test */
+    public function owner() {
+        $wallet = factory(Wallet::class)->create();
+        $this->assertInstanceOf(User::class, $wallet->owner);
+    }
+
     /** @test */
     public function delete_and_restore_wallet()
     {
