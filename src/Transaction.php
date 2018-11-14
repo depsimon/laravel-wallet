@@ -34,15 +34,6 @@ class Transaction extends Model
         parent::__construct($attributes);
     }
 
-    public static function boot()
-    {
-        parent::boot();
-
-        static::creating(function ($transaction) {
-            $transaction->hash = uniqid();
-        });
-    }
-
     /**
      * Retrieve the wallet from this transaction
      */

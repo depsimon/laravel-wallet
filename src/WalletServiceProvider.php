@@ -4,6 +4,7 @@ namespace Depsimon\Wallet;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Database\Eloquent\Factory;
+use Illuminate\Support\Carbon;
 
 class WalletServiceProvider extends ServiceProvider
 {
@@ -24,6 +25,9 @@ class WalletServiceProvider extends ServiceProvider
         if (config('wallet.load_migrations', true)) {
             $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
         }
+
+        config('wallet.wallet_model')::observe(WalletObserver::class);
+        config('wallet.transaction_model')::observe(TransactionObserver::class);
     }
 
     /**
