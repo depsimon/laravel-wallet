@@ -156,7 +156,7 @@ class Wallet extends Model
         if ($difference == 0) {
             return;
         };
-        $type = $difference > 0 ? 'deposit' : 'withdraw';
+        $type = $difference > 0 ? 'deposit' : 'forceWithdraw';
         $this->balance = $actualBalance;
         $this->save();
         return $this->{$type}($difference, ['comment' => $comment]);
