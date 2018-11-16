@@ -149,10 +149,10 @@ class Wallet extends Model
      * @param integer $balance
      * @param string $comment
      */
-    public function setBalance(int $balance, $comment = 'Manual offset transaction')
+    public function setBalance($amount, $comment = 'Manual offset transaction')
     {
         $actualBalance = $this->actualBalance();
-        $difference = $balance - $actualBalance;
+        $difference = $amount - $actualBalance;
         if ($difference == 0) {
             return;
         };

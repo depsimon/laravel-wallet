@@ -126,14 +126,14 @@ class WalletTest extends TestCase
         $this->assertEquals('test', $offsetTransaction->meta['comment']);
         $this->assertEquals(5, $offsetTransaction->amount);
         $this->assertEquals(5, $user->balance);
-        $offsetTransaction = $user->wallet->setBalance(15, 'test');
+        $offsetTransaction = $user->wallet->setBalance(15.45, 'test');
         $this->assertEquals('deposit', $offsetTransaction->type);
         $this->assertEquals('test', $offsetTransaction->meta['comment']);
-        $this->assertEquals(10, $offsetTransaction->amount);
-        $this->assertEquals(15, $user->balance);
+        $this->assertEquals(10.45, $offsetTransaction->amount);
+        $this->assertEquals(15.45, $user->balance);
         $offsetTransaction = $user->wallet->setBalance(0);
         $this->assertEquals('withdraw', $offsetTransaction->type);
-        $this->assertEquals(15, $offsetTransaction->amount);
+        $this->assertEquals(15.45, $offsetTransaction->amount);
         $this->assertEquals(0, $user->balance);
         $this->assertEquals('Manual offset transaction', $offsetTransaction->meta['comment']);
     }
