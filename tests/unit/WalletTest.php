@@ -13,7 +13,8 @@ class WalletTest extends TestCase
 {
 
     /** @test */
-    public function owner() {
+    public function owner()
+    {
         $wallet = factory(Wallet::class)->create();
         $this->assertInstanceOf(User::class, $wallet->owner);
     }
@@ -51,10 +52,24 @@ class WalletTest extends TestCase
         $user->wallet->deposit(100.75);
         $this->assertEquals($user->balance, 110.75);
         $this->assertEquals($user->wallet->actualBalance(), 110.75);
+        $user->wallet->setBalance(-50);
+        $this->assertEquals(-50, $user->wallet->balance);
+        $user->wallet->deposit(25);
+        $this->assertEquals(-25, $user->wallet->balance);
+    }
+
+
+    /** @test */
+    public function deposit_negative_amount()
+    {
+        $user = factory(User::class)->create();
+        $this->assertFalse($user->wallet->exists);
+        $transaction = $user->wallet->failDeposit(-30);
+        $this->assertTrue($transaction->trashed());
         $this->expectException(UnacceptedTransactionException::class);
         $transaction = $user->wallet->deposit(-30);
-        $this->assertTrue($transaction->trashed());
     }
+
 
     /** @test */
     public function fail_deposit()
