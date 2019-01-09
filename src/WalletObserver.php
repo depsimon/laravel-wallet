@@ -7,14 +7,13 @@ use Depsimon\Wallet\Transaction;
 
 class WalletObserver
 {
-
-    public function deleting(Wallet $wallet)
+    public function saved(Wallet $wallet)
     {
-        $wallet->transactions()->delete();
-    }
-
-    public function restoring(Wallet $wallet)
-    {
-        $wallet->transactions()->withTrashed()->restore();
+        if ($wallet->getOriginal('balance') != $wallet->balance) {
+            // TODO: release a job that recalculates
+            // the correct balance asynchronously
+            // Action needs to be rebounced to
+            // avoid unnecessary executions
+        }
     }
 }

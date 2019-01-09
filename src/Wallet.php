@@ -42,18 +42,6 @@ class Wallet extends Model
         return $this->morphTo();
     }
 
-
-    /**
-     * Determine if the user can withdraw the given amount
-     * @param  integer $amount
-     * @return boolean
-     */
-    public function canWithdraw($amount = null)
-    {
-        return $amount ? $this->balance >= abs($amount) : $this->balance > 0;
-    }
-
-
     /**
      * Move credits to this account
      * @param  integer $amount
@@ -65,10 +53,7 @@ class Wallet extends Model
     {
         $accepted = $amount >= 0 && !$forceFail ? true : false;
 
-        if ($accepted) {
-            $this->balance = $this->actualBalance() + $amount;
-            $this->save();
-        } elseif (!$this->exists) {
+        if (!$this->exists) {
             $this->save();
         }
 
@@ -83,6 +68,7 @@ class Wallet extends Model
         if (!$accepted && !$forceFail) {
             throw new UnacceptedTransactionException($transaction, 'Deposit not accepted!');
         }
+        $this->refresh();
         return $transaction;
     }
 
@@ -108,13 +94,9 @@ class Wallet extends Model
      */
     public function withdraw($amount, $meta = [], $type = 'withdraw', $shouldAccept = true)
     {
-        $amount = abs($amount);
         $accepted = $shouldAccept ? $this->canWithdraw($amount) : true;
 
-        if ($accepted) {
-            $this->balance = $this->actualBalance() - $amount;
-            $this->save();
-        } elseif (!$this->exists) {
+        if (!$this->exists) {
             $this->save();
         }
 
@@ -129,6 +111,7 @@ class Wallet extends Model
         if (!$accepted) {
             throw new UnacceptedTransactionException($transaction, 'Withdrawal not accepted due to insufficient funds!');
         }
+        $this->refresh();
         return $transaction;
     }
 
@@ -141,6 +124,16 @@ class Wallet extends Model
     public function forceWithdraw($amount, $meta = [], $type = 'withdraw')
     {
         return $this->withdraw($amount, $meta, $type, false);
+    }
+
+    /**
+     * Determine if the user can withdraw the given amount
+     * @param  integer $amount
+     * @return boolean
+     */
+    public function canWithdraw($amount = null)
+    {
+        return $amount ? $this->balance >= abs($amount) : $this->balance > 0;
     }
 
     /**
@@ -170,12 +163,12 @@ class Wallet extends Model
     public function actualBalance(bool $save = false)
     {
         $credits = $this->transactions()
-            ->whereIn('type', ['deposit', 'refund'])
+            ->whereNotIn('type', config('wallet.subtracting_transaction_types'))
             ->sum('amount');
 
         $debits = $this->transactions()
-            ->whereIn('type', ['withdraw', 'payout'])
-            ->sum('amount');
+            ->whereIn('type', config('wallet.subtracting_transaction_types'))
+            ->sum(\DB::raw('abs(amount)'));
 
         $balance = $credits - $debits;
 

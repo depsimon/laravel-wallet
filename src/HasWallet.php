@@ -9,7 +9,7 @@ trait HasWallet
      */
     public function getBalanceAttribute()
     {
-        return $this->wallet->balance;
+        return $this->wallet->refresh()->balance;
     }
 
     /**
@@ -30,7 +30,9 @@ trait HasWallet
             config('wallet.wallet_model', Wallet::class),
             'owner_id',
             'wallet_id'
-        )->latest();
+        )->whereHas('wallet', function ($query) {
+            $query->whereNull('deleted_at');
+        })->latest();
     }
 
 }

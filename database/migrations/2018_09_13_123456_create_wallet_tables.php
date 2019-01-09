@@ -13,8 +13,10 @@ class CreateWalletTables extends Migration
      */
     public function up()
     {
-        if (!Schema::hasTable('wallets')) {
-            Schema::create('wallets', function (Blueprint $table) {
+        $walletModelClass = config('wallet.wallet_model');
+        $walletTable = (new $walletModelClass())->getTable();
+        if (!Schema::hasTable($walletTable)) {
+            Schema::create($walletTable, function (Blueprint $table) {
                 $table->increments('id');
                 $table->unsignedInteger('owner_id')->nullable();
                 $table->string('owner_type')->nullable();
@@ -29,9 +31,10 @@ class CreateWalletTables extends Migration
                 $table->softDeletes();
             });
         }
-
-        if (!Schema::hasTable('wallet_transactions')) {
-            Schema::create('wallet_transactions', function (Blueprint $table) {
+        $transactionModelClass = config('wallet.transaction_model');
+        $transactionTable = (new $transactionModelClass())->getTable();
+        if (!Schema::hasTable($transactionTable)) {
+            Schema::create($transactionTable, function (Blueprint $table) {
                 $table->increments('id');
                 $table->unsignedInteger('wallet_id');
 
@@ -61,7 +64,11 @@ class CreateWalletTables extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('wallet_transactions');
-        Schema::dropIfExists('wallets');
+        $transactionModelClass = config('wallet.transaction_model');
+        $transactionTable = (new $transactionModelClass())->getTable();
+        Schema::dropIfExists($transactionTable);
+        $walletModelClass = config('wallet.transaction_model');
+        $walletTable = (new $walletModelClass())->getTable();
+        Schema::dropIfExists($walletTable);
     }
 }

@@ -39,18 +39,66 @@ class Transaction extends Model
      */
     public function wallet()
     {
-        return $this->belongsTo(config('wallet.wallet_model', Wallet::class));
+        return $this->belongsTo(config('wallet.wallet_model', Wallet::class))->withTrashed();
     }
 
     /**
-     * Retrieve the amount with the positive or negative sign
+     * Retrieve the original version of the transaciton (if it has been replaced)
      */
-    public function getAmountWithSignAttribute()
+    public function origin()
     {
-        return in_array($this->type, ['deposit', 'refund'])
-            ? '+' . $this->amount
-            : '-' . $this->amount;
+        return $this->belongsTo(config('wallet.transaction_model', Transaction::class))->withTrashed();
     }
 
+    /**
+     * Creates a replication and updates it with the new
+     * attributes, adds the old as origin relation
+     * and then soft deletes the old.
+     * Be careful if the old transaction was referenced
+     * by other models.
+     */
+    public function replace($attributes)
+    {
+        return \DB::transaction(function () use ($attributes) {
+            $newTransaction = $this->replicate();
+            $newTransaction->created_at = $this->created_at;
+            $newTransaction->fill($attributes);
+            $newTransaction->origin()->associate($this);
+            $newTransaction->save();
+            $this->delete();
+            return $newTransaction;
+        });
+    }
+
+    public function getAmountAttribute()
+    {
+        return $this->getAmountWithSign();
+    }
+
+    public function setAmountAttribute($amount)
+    {
+        if ($this->shouldConvertToAbsoluteAmount()) {
+            $amount = abs($amount);
+        }
+        $this->attributes['amount'] = ($amount);
+    }
+
+    public function getAmountWithSign($amount = null, $type = null)
+    {
+        $amount = $amount ? : $this->attributes['amount'];
+        $type = $type ? : $this->type;
+        $amount = $this->shouldConvertToAbsoluteAmount() ? abs($amount) : $amount;
+        if (in_array($type, config('wallet.subtracting_transaction_types', []))) {
+            return $amount * -1;
+        }
+        return $amount;
+    }
+
+    public function shouldConvertToAbsoluteAmount($type = null)
+    {
+        $type = $type ? : $this->type;
+        return in_array($type, config('wallet.subtracting_transaction_types', [])) ||
+            in_array($type, config('wallet.adding_transaction_types', []));
+    }
 
 }
