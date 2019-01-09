@@ -56,24 +56,24 @@ Then you can easily make transactions from your user model.
 
 ``` php
 $user = User::find(1);
-$user->balance; // 0
+$user->wallet->balance; // 0
 
-$user->deposit(100);
-$user->balance; // 100
+$user->wallet->deposit(100);
+$user->wallet->balance; // 100
 
-$user->withdraw(50);
-$user->balance; // 50
+$user->wallet->withdraw(50);
+$user->wallet->balance; // 50
 
-$user->forceWithdraw(200);
-$user->balance; // -150
+$user->wallet->forceWithdraw(200);
+$user->wallet->balance; // -150
 ```
 
 You can easily add meta information to the transactions to suit your needs.
 
 ``` php
 $user = User::find(1);
-$user->deposit(100, 'deposit', ['stripe_source' => 'ch_BEV2Iih1yzbf4G3HNsfOQ07h', 'description' => 'Deposit of 100 credits from Stripe Payment']);
-$user->withdraw(10, 'withdraw', ['description' => 'Purchase of Item #1234']);
+$user->wallet->deposit(100, ['stripe_source' => 'ch_BEV2Iih1yzbf4G3HNsfOQ07h', 'description' => 'Deposit of 100 credits from Stripe Payment']);
+$user->wallet->withdraw(10, ['description' => 'Purchase of Item #1234']);
 ```
 ## Testing
 This package makes use of https://github.com/orchestral/testbench to create a
