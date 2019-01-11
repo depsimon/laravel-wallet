@@ -2,11 +2,11 @@
 
 namespace Depsimon\Wallet\Tests\Unit;
 
-use Depsimon\Wallet\Wallet;
-use Depsimon\Wallet\UnacceptedTransactionException;
+use Depsimon\Wallet\Models\Wallet;
+use Depsimon\Wallet\Exceptions\UnacceptedTransactionException;
 use Depsimon\Wallet\Tests\TestCase;
 use Depsimon\Wallet\Tests\Models\User;
-use Depsimon\Wallet\Transaction;
+use Depsimon\Wallet\Models\Transaction;
 use Illuminate\Support\Collection;
 
 class TransactionTest extends TestCase

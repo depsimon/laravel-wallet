@@ -3,6 +3,7 @@
 namespace Depsimon\Wallet\Tests;
 
 use Orchestra\Testbench\TestCase as BaseTestCase;
+use Depsimon\Wallet\WalletServiceProvider;
 
 class TestCase extends BaseTestCase
 {
@@ -20,7 +21,7 @@ class TestCase extends BaseTestCase
     protected function getPackageProviders($app)
     {
         return [
-            'Depsimon\Wallet\WalletServiceProvider'
+            WalletServiceProvider::class
         ];
     }
 }

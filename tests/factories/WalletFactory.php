@@ -1,7 +1,7 @@
 <?php
 
 use Faker\Generator as Faker;
-use Depsimon\Wallet\Wallet;
+use Depsimon\Wallet\Models\Wallet;
 use Depsimon\Wallet\Tests\Models\User;
 
 $factory->define(Wallet::class, function (Faker $faker, $attributes) {

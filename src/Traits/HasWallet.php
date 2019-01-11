@@ -1,6 +1,6 @@
 <?php
 
-namespace Depsimon\Wallet;
+namespace Depsimon\Wallet\Traits;
 
 trait HasWallet
 {

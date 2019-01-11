@@ -2,12 +2,13 @@
 
 namespace Depsimon\Wallet\Tests\Unit;
 
-use Depsimon\Wallet\Wallet;
-use Depsimon\Wallet\UnacceptedTransactionException;
+use Depsimon\Wallet\Models\Wallet;
+use Depsimon\Wallet\Exceptions\UnacceptedTransactionException;
 use Depsimon\Wallet\Tests\TestCase;
 use Depsimon\Wallet\Tests\Models\User;
-use Depsimon\Wallet\Transaction;
+use Depsimon\Wallet\Models\Transaction;
 use Illuminate\Support\Collection;
+use Depsimon\Wallet\Jobs\RecalculateWalletBalance;
 
 class WalletTest extends TestCase
 {
@@ -167,6 +168,27 @@ class WalletTest extends TestCase
         $this->assertEquals($expectedBalance, $user->balance);
         $this->assertEquals($expectedBalance, $user->wallet->balance);
         $this->assertEquals($expectedBalance, $user->wallet->actualBalance());
+    }
+
+
+    /** @test */
+    function balance_change_doesnt_trigger_recalculation()
+    {
+        $wallet = factory(Wallet::class)->create();
+        $this->doesntExpectJobs(RecalculateWalletBalance::class);
+        $wallet->balance = 10;
+        $wallet->save();
+    }
+
+    /** @test */
+    function balance_change_triggers_recalculation_if_activated()
+    {
+        $wallet = factory(Wallet::class)->create();
+        config(['auto_recalculate_balance' => true]);
+        $this->expectsJobs(RecalculateWalletBalance::class);
+        $wallet->balance = -10;
+        $wallet->save();
+
     }
 
     /** @test */

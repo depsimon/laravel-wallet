@@ -1,8 +1,9 @@
 <?php
 
-namespace Depsimon\Wallet;
+namespace Depsimon\Wallet\Exceptions;
 
 use Exception;
+use Depsimon\Wallet\Models\Transaction;
 
 class UnacceptedTransactionException extends Exception
 {

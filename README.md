@@ -42,7 +42,7 @@ Add the `HasWallet` trait to your User model.
 
 ``` php
 
-use Depsimon\Wallet\HasWallet;
+use Depsimon\Wallet\Traits\HasWallet;
 
 class User extends Model
 {

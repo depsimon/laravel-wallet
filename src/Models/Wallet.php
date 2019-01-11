@@ -1,11 +1,12 @@
 <?php
 
-namespace Depsimon\Wallet;
+namespace Depsimon\Wallet\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Carbon;
 use Exception;
+use Depsimon\Wallet\Exceptions\UnacceptedTransactionException;
 
 class Wallet extends Model
 {
@@ -47,7 +48,7 @@ class Wallet extends Model
      * @param  integer $amount
      * @param  string  $type
      * @param  array   $meta
-     * @return Depsimon\Wallet\Transaction
+     * @return Depsimon\Wallet\Models\Transaction
      */
     public function deposit($amount, $meta = [], $type = 'deposit', $forceFail = false)
     {
@@ -77,7 +78,7 @@ class Wallet extends Model
      * @param  integer $amount
      * @param  string  $type
      * @param  array   $meta
-     * @return Depsimon\Wallet\Transaction
+     * @return Depsimon\Wallet\Models\Transaction
      */
     public function failDeposit($amount, $meta = [], $type = 'deposit')
     {
@@ -90,7 +91,7 @@ class Wallet extends Model
      * @param  string  $type
      * @param  array   $meta
      * @param  boolean $shouldAccept
-     * @return Depsimon\Wallet\Transaction
+     * @return Depsimon\Wallet\Models\Transaction
      */
     public function withdraw($amount, $meta = [], $type = 'withdraw', $shouldAccept = true)
     {

@@ -1,9 +1,9 @@
 <?php
 
-namespace Depsimon\Wallet;
+namespace Depsimon\Wallet\Observers;
 
-use Depsimon\Wallet\Wallet;
-use Depsimon\Wallet\Transaction;
+use Depsimon\Wallet\Models\Wallet;
+use Depsimon\Wallet\Models\Transaction;
 
 class TransactionObserver
 {
