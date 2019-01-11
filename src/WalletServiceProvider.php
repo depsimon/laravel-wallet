@@ -25,7 +25,7 @@ class WalletServiceProvider extends ServiceProvider
             ], 'migrations');
         }
         if (config('wallet.load_migrations', true)) {
-            $this->loadMigrationsFrom(__DIR__ . '/../../database/migrations');
+            $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
         }
         config('wallet.wallet_model')::observe(WalletObserver::class);
         config('wallet.transaction_model')::observe(TransactionObserver::class);
