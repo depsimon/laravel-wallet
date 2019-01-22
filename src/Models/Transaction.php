@@ -43,7 +43,7 @@ class Transaction extends Model
     }
 
     /**
-     * Retrieve the original version of the transaciton (if it has been replaced)
+     * Retrieve the original version of the transaction (if it has been replaced)
      */
     public function origin()
     {
@@ -51,7 +51,7 @@ class Transaction extends Model
     }
 
     /**
-     * Retrieve the original version of the transaciton (if it has been replaced)
+     * Retrieve child transactions
      */
     public function children()
     {
