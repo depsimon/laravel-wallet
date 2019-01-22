@@ -23,8 +23,23 @@ class TransactionTest extends TestCase
     public function origin()
     {
         $origin = factory(Transaction::class)->create();
-        $transaction = factory(Transaction::class)->create(['origin_id' => $origin->id]);
+        $transaction = factory(Transaction::class)->create();
+        $transaction->origin()->associate($origin);
+        $transaction->save();
+        $transaction = $transaction->fresh();
         $this->assertInstanceOf(Transaction::class, $transaction->origin);
+        $this->assertTrue($origin->is($transaction->origin));
+    }
+
+    /** @test */
+    public function children()
+    {
+        $origin = factory(Transaction::class)->create();
+        $transaction = factory(Transaction::class)->create();
+        $origin->children()->save($transaction);
+        $this->assertInstanceOf(Collection::class, $transaction->children);
+        $child = $origin->children()->where('id', $transaction->id)->first();
+        $this->assertTrue($transaction->is($child));
         $this->assertTrue($origin->is($transaction->origin));
     }
 

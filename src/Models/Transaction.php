@@ -51,6 +51,14 @@ class Transaction extends Model
     }
 
     /**
+     * Retrieve the original version of the transaciton (if it has been replaced)
+     */
+    public function children()
+    {
+        return $this->hasMany(config('wallet.transaction_model', Transaction::class), 'origin_id');
+    }
+
+    /**
      * Creates a replication and updates it with the new
      * attributes, adds the old as origin relation
      * and then soft deletes the old.
