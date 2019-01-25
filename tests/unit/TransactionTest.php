@@ -43,6 +43,14 @@ class TransactionTest extends TestCase
         $this->assertTrue($origin->is($transaction->origin));
     }
 
+    /** @test */
+    public function reference() {
+
+        $transaction = factory(Transaction::class)->create();
+        $this->assertNull($transaction->reference);
+        $transaction->reference()->associate($transaction->wallet);
+        $this->assertTrue($transaction->wallet->is($transaction->reference));
+    }
 
     /** @test */
     public function update()

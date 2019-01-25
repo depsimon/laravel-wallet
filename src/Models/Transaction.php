@@ -59,6 +59,14 @@ class Transaction extends Model
     }
 
     /**
+     * Retrieve optional reference model
+     */
+    public function reference()
+    {
+        return $this->morphTo();
+    }
+
+    /**
      * Creates a replication and updates it with the new
      * attributes, adds the old as origin relation
      * and then soft deletes the old.
