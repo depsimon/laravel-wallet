@@ -44,7 +44,8 @@ class TransactionTest extends TestCase
     }
 
     /** @test */
-    public function reference() {
+    public function reference()
+    {
 
         $transaction = factory(Transaction::class)->create();
         $this->assertNull($transaction->reference);
@@ -105,6 +106,17 @@ class TransactionTest extends TestCase
         $this->assertTrue($transaction->refresh()->created_at->diffInSeconds($replacement->refresh()->created_at) < 1);
         $this->assertTrue($transaction->is($replacement->origin));
         $this->assertTrue($replacement->origin->trashed());
+    }
+
+    /** @test */
+    public function generated_hash_is_set()
+    {
+        $transaction = factory(Transaction::class)->create();
+        $this->assertNotNull($transaction->hash);
+        $transactions = factory(Transaction::class, 2)->create();
+        $transactions->each(function ($transaction) {
+            $this->assertNotNull($transaction->hash);
+        });
     }
 
 }

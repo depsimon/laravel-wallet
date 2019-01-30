@@ -192,14 +192,14 @@ class WalletTest extends TestCase
     }
 
     /** @test */
-    function test_recalculation_performance()
+    function recalculation_performance()
     {
         $user = factory(User::class)->create();
         Transaction::flushEventListeners();
         $numbers = [1, 10, 100, 1000, 10000];
         $result = collect($numbers)->mapWithKeys(function ($number) use ($user) {
             $alreadyExist = Transaction::count();
-            $transactions = factory(Transaction::class, $number - $alreadyExist)->create();
+            $transactions = factory(Transaction::class, $number - $alreadyExist)->create(['hash' => uniqid()]);
             $start = microtime(true);
             $actualBalance = $user->wallet->actualBalance();
             return [$number => microtime(true) - $start];

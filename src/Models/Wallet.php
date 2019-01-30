@@ -163,15 +163,20 @@ class Wallet extends Model
      */
     public function actualBalance(bool $save = false)
     {
-        $credits = $this->transactions()
-            ->whereNotIn('type', config('wallet.subtracting_transaction_types'))
+        $undefined = $this->transactions()
+            ->whereNotIn('type', array_merge(
+                config('wallet.adding_transaction_types'),
+                config('wallet.subtracting_transaction_types')
+            ))
             ->sum('amount');
+        $credits = $this->transactions()
+            ->whereIn('type', config('wallet.adding_transaction_types'))
+            ->sum(\DB::raw('abs(amount)'));
 
         $debits = $this->transactions()
             ->whereIn('type', config('wallet.subtracting_transaction_types'))
             ->sum(\DB::raw('abs(amount)'));
-
-        $balance = $credits - $debits;
+        $balance = $undefined + $credits - $debits;
 
         if ($save) {
             $this->balance = $balance;
