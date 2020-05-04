@@ -45,6 +45,12 @@ class User extends Model
 }
 ```
 
+At some point before making transactions, create the user's wallet.
+
+```php
+$user->wallet()->create();
+```
+
 Then you can easily make transactions from your user model.
 
 ``` php
